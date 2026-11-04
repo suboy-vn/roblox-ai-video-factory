@@ -386,16 +386,25 @@ elif page == "Production Manager":
         options[kind] = choose_item(rows, label, f"manifest_{kind}") if rows else None
     title = st.text_input("Tên Production Job", "Roblox Episode")
     if st.button("Tạo Production Job JSON", type="primary"):
+        character_rows = get_items("character")
         manifest = {
             "schema_version":"ravf.production-job.v1",
             "job_id":str(uuid.uuid4()),
             "title":title,
             "created_at":now(),
             "status":"queued",
-            "records":{k:(v.get("id") if v else None) for k,v in options.items()},
+            "source_record_ids":{k:(v.get("id") if v else None) for k,v in options.items()},
+            "records":{
+                "story": options["story"].get("payload") if options["story"] else None,
+                "world": options["world"].get("payload") if options["world"] else None,
+                "director": options["director"].get("payload") if options["director"] else None,
+                "sound": options["sound"].get("payload") if options["sound"] else None,
+                "characters":[r.get("payload", {}) for r in character_rows],
+            },
             "steps":[{"name":n,"status":"pending"} for n in ["build_world","build_characters","run_director","record_obs","render_ffmpeg","qc","publish"]],
             "execution_target":"windows_agent",
-            "note":"Cloud creates the manifest; Roblox Studio, OBS and FFmpeg execute on the Windows Agent."
+            "agent_requirements":["Roblox Studio","OBS Studio","FFmpeg"],
+            "note":"Cloud exports this complete job manifest. Roblox Studio, OBS and FFmpeg execute on the Windows Agent."
         }
         saved=save_item("job",title,manifest)
         st.success("Production Job đã tạo.")
