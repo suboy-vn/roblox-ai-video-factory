@@ -3,21 +3,77 @@
   "$id": "https://example.invalid/ravf/production-job.v1.schema.json",
   "title": "RAVF Production Job",
   "type": "object",
-  "required": ["schema_version", "job_id", "title", "created_at", "status", "execution_target", "steps"],
+  "required": [
+    "schema_version",
+    "job_id",
+    "title",
+    "created_at",
+    "status",
+    "execution_target",
+    "steps"
+  ],
   "properties": {
-    "schema_version": {"const": "ravf.production-job.v1"},
-    "job_id": {"type": "string", "minLength": 1},
-    "title": {"type": "string", "minLength": 1, "maxLength": 180},
-    "created_at": {"type": "string", "format": "date-time"},
-    "status": {"enum": ["queued", "in_progress", "blocked", "completed", "failed"]},
-    "execution_target": {"const": "windows_agent"},
+    "schema_version": {
+      "const": "ravf.production-job.v1"
+    },
+    "job_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 180
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "in_progress",
+        "blocked",
+        "completed",
+        "failed"
+      ]
+    },
+    "execution_target": {
+      "const": "windows_agent"
+    },
     "records": {
       "type": "object",
       "properties": {
-        "story": {"type": ["object", "null"]},
-        "world": {"type": ["object", "null"]},
-        "director": {"type": ["object", "null"]},
-        "sound": {"type": ["object", "null"]}
+        "story": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "world": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "director": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "sound": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
       },
       "additionalProperties": false
     },
@@ -25,11 +81,26 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "status"],
+        "required": [
+          "name",
+          "status"
+        ],
         "properties": {
-          "name": {"type": "string"},
-          "status": {"enum": ["pending", "running", "completed", "blocked", "failed"]},
-          "message": {"type": "string"}
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "blocked",
+              "failed"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
         },
         "additionalProperties": true
       }
